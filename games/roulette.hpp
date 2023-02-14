@@ -71,6 +71,32 @@ class Roulette
 			return true;
 		}
 
+		float get_player_total_bets(int player_id)
+		{
+			float res = 0;
+			for (size_t i = 0; i < current_bets.size(); i++)
+			{
+				roulette_bet_t bet = current_bets[i];
+				if (bet.player_id == player_id)
+					res += bet.amount;
+			}
+			return res;
+		}
+
+		bool is_bet_allowed(float bet_amount, int player_id, int single_bet_value)
+		{
+			if (!casino->is_player_connected(player_id))
+				return false;
+			if (single_bet_value < 0 || single_bet_value > 36)
+				return false;
+			if (bet_amount < minimum_bet)
+				return false;
+			float total_bet = get_player_total_bets(player_id);
+			if (total_bet > maximum_bet)
+				return false;
+			return true;
+		}
+
 		float cat0(roulette_bet_t bet) {//1st half
 			return (spin_res >= 0 && spin_res <= 18) ? bet.amount * 2.0f : 0;}
 		float cat1(roulette_bet_t bet) {//2nd half
@@ -98,32 +124,6 @@ class Roulette
 
 		float (Roulette::*bet_check_result[100])(roulette_bet_t) = {&Roulette::cat0, &Roulette::cat1, &Roulette::cat2, &Roulette::cat3,
 								&Roulette::cat4, &Roulette::cat5, &Roulette::cat6, &Roulette::cat7, &Roulette::cat8, &Roulette::cat9};
-
-		float get_player_total_bets(int player_id)
-		{
-			float res = 0;
-			for (size_t i = 0; i < current_bets.size(); i++)
-			{
-				roulette_bet_t bet = current_bets[i];
-				if (bet.player_id == player_id)
-					res += bet.amount;
-			}
-			return res;
-		}
-
-		bool is_bet_allowed(float bet_amount, int player_id, int single_bet_value)
-		{
-			if (!casino->is_player_connected(player_id))
-				return false;
-			if (single_bet_value < 0 || single_bet_value > 36)
-				return false;
-			if (bet_amount < minimum_bet)
-				return false;
-			float total_bet = get_player_total_bets(player_id);
-			if (total_bet > maximum_bet)
-				return false;
-			return true;
-		}
 
 		//store an array of how much players won
 		//preivous_round_wins
