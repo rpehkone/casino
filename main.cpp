@@ -1,5 +1,5 @@
 #include "games/PlayerRegistry.hpp"
-#include "games/roulette.hpp"
+#include "games/Roulette.hpp"
 #include "games/Blackjack.hpp"
 #include <iostream>
 
