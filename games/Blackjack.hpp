@@ -5,6 +5,8 @@
 
 #include "PlayerRegistry.hpp"
 
+// https://www.youtube.com/watch?v=eyoh-Ku9TCI
+
 class Blackjack
 {
 	public:
@@ -16,15 +18,55 @@ class Blackjack
 			srand((unsigned)time(0));
 		}
 
-		//join game
-		//10 sec to place bet on round start
-		//start if everyon placed bet
-		//while everyone not lost
+		bool place_bet(float bet_amount, int player_id)
+		{
+		}
+
+		void tick()
+		{
+			//idle until someone places bet
+
+			//if no-one playing
+			{
+				blackjack_start();
+				//players place bets (10 sec)
+					//skip time if everyon placed bet
+			}
+
 			//dealer draw
+			//player draw
+			int dealer_total = 0;
+			int player_total = 0;
+			if (player_total > 21 || player_total <= dealer_total)
+				;//lose
 			//everyone 10 sec to place bet (if simulatin irl casino)
 			//10 sec to place bet (online)
+		}
+
 	private:
 		PlayerRegistry* casino;
 		int minimum_bet;
 		int maximum_bet;
+
+		//represents player in single round
+		struct blackjack_bet_t
+		{
+			std::vector<int> cards;
+			int player_id;
+		};
+
+		std::vector<int> dealer_cards;
+		std::vector<blackjack_bet_t> players;
+
+		//maybe if player doesnt input in whole round its disconnected
+		void blackjack_start(void)
+		{
+		}
+
+
+		int get_card(void)
+		{
+			int res = rand() % 13 + 1;
+			return res;
+		}
 };
