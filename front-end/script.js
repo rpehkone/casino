@@ -10,12 +10,32 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-const loader = new GLTFLoader();
-loader.load('files/roulette_table.glb', function ( gltf ) {
-	scene.add( gltf.scene );
-}, undefined, function ( error ) {
-	console.error( error );
-});
+const loading_div = document.createElement("div");
+loading_div.classList.add("loadingtext");
+loading_div.textContent = "Loading";
+document.body.appendChild(loading_div);
+
+var manager = new THREE.LoadingManager();
+manager.onLoad = function () {
+	loading_div.textContent = "";
+};
+manager.onProgress = async ( url, itemsLoaded, itemsTotal ) => {
+	let progress = (itemsLoaded / itemsTotal * 100);
+	if (itemsTotal <= 2)
+		progress = 0;
+	var str = Math.ceil(progress) + '%';
+	loading_div.textContent = str
+};
+
+const loader = new GLTFLoader(manager);
+loader.load(
+	'files/roulette_table.glb',
+	function ( gltf ) {
+		scene.add( gltf.scene );
+	}, undefined, function ( error ) {
+		console.error( error );
+	}
+);
 
 scene.background = new THREE.Color(0xc0c0c0);
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
